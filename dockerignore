@@ -1,0 +1,28 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore local virtual environments
+env/
+venv/
+.venv/
+
+# Ignore VS Code settings and OS-specific files
+.vscode/
+*.DS_Store
+Thumbs.db
+
+# Ignore build/test/output artifacts
+out/
+tests/__pycache__/
+*.log
+
+# Ignore your secrets
+.env
+.env.local
+
+# Ignore Git metadata
+.git
+.gitignore

@@ -1,0 +1,4 @@
+deal_id,deal_name,amount_eur,stage,last_activity
+OPP-123,ACME Suite,45000,Proposal,6/25/2025 13:05
+OPP-124,Initech Beta,30000,Pricing,7/1/2025 16:12
+OPP-125,Globex POC,60000,Demo,6/20/2025 10:44

@@ -1,0 +1,18 @@
+[
+    {
+        "deal_id": "OPP-123",
+        "contact": "marie.cfo@acme.com",
+        "nudge": "Follow up with a personalized video message highlighting key benefits to prompt a response. Offer a limited-time discount to incentivize action.",
+        "urgency": 630000.0,
+        "reply_speed": 45.0,
+        "tone": "formal"
+    },
+    {
+        "deal_id": "OPP-125",
+        "contact": "bob@globex.com",
+        "nudge": "Send a personalized follow-up email highlighting key benefits and offering a tailored demo time slot. Engage buyer with a sense of urgency.",
+        "urgency": 1140000.0,
+        "reply_speed": 3090.0,
+        "tone": "formal"
+    }
+]

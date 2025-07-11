@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nudge Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .nudge {
+            background: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .nudge h4 {
+            margin: 0 0 5px 0;
+            color: #007bff;
+        }
+        .nudge p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nudge Generator</h1>
+        <p>Click the button below to stream nudges from the API:</p>
+        <button id="streamBtn" onclick="streamNudges()">Start Streaming Nudges</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        let eventSource = null;
+
+        function streamNudges() {
+            const button = document.getElementById('streamBtn');
+            const output = document.getElementById('output');
+            
+            button.disabled = true;
+            button.textContent = 'Streaming...';
+            output.innerHTML = '<p>Connecting to stream...</p>';
+
+            // Create EventSource for Server-Sent Events
+            eventSource = new EventSource('/nudges');
+            
+            eventSource.onmessage = function(event) {
+                if (event.data === '[DONE]') {
+                    output.innerHTML += '<p><strong>Stream completed!</strong></p>';
+                    button.disabled = false;
+                    button.textContent = 'Start Streaming Nudges';
+                    eventSource.close();
+                    return;
+                }
+
+                try {
+                    const nudge = JSON.parse(event.data);
+                    const nudgeDiv = document.createElement('div');
+                    nudgeDiv.className = 'nudge';
+                    nudgeDiv.innerHTML = `
+                        <h4>Deal ID: ${nudge.deal_id}</h4>
+                        <p><strong>Contact:</strong> ${nudge.contact}</p>
+                        <p><strong>Nudge:</strong> ${nudge.nudge}</p>
+                        <p><strong>Urgency:</strong> ${nudge.urgency}</p>
+                        <p><strong>Reply Speed:</strong> ${nudge.reply_speed} minutes</p>
+                        <p><strong>Tone:</strong> ${nudge.tone}</p>
+                    `;
+                    output.appendChild(nudgeDiv);
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                }
+            };
+
+            eventSource.onerror = function(event) {
+                output.innerHTML += '<p><strong>Error: Connection lost</strong></p>';
+                button.disabled = false;
+                button.textContent = 'Start Streaming Nudges';
+                eventSource.close();
+            };
+        }
+    </script>
+</body>
+</html> 
